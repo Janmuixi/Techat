@@ -1,27 +1,28 @@
 <template>
   <div id="Login">
     <div class="login-form">
-      <h2 class="text-center">Log in</h2>       
-      <div class="form-group">
-          <input type="text" class="form-control" v-model="email" placeholder="Email" required="required">
-      </div>
-      <div class="form-group">
-          <input type="password" class="form-control" v-model="password" placeholder="Password" required="required">
-      </div>
-      <div class="form-group">
-          <button v-on:click="login" class="btn btn-primary btn-block">Log in</button>
-      </div>
-      <div class="form-group">
-          <a href="#" class="pull-right"> <span v-on:click="openForgotPasswordForm">Forgot Password?</span></a>
-          <div v-show="isForgotPasswordOpen" class="input-group forgotPasswordInput">
-            <input v-model="emailToRecoverPassword" class="input-recover form-control" placeholder="Recovery email" type="email">
-            <span class="input-group-btn">
-              <button v-on:click="forgotPassword" class="btn-send btn btn-primary">Send</button>
-            </span>
-            
+      <form>
+        <h2 class="text-center">Log in</h2>       
+          <div class="form-group">
+              <input type="text" class="form-control" v-model="email" placeholder="Email" required="required">
           </div>
+          <div class="form-group">
+              <input type="password" class="form-control" v-model="password" placeholder="Password" required="required">
+          </div>
+          <div class="form-group">
+              <button v-on:click="login" class="btn btn-primary btn-block">Log in</button>
+          </div>
+          <div class="form-group">
+              <a href="#" class="pull-right"> <span v-on:click="openForgotPasswordForm">Forgot Password?</span></a>
+              <div v-show="isForgotPasswordOpen" class="input-group forgotPasswordInput">
+                <input v-model="emailToRecoverPassword" class="input-recover form-control" placeholder="Recovery email" type="email">
+                <span class="input-group-btn">
+                  <button v-on:click="forgotPassword" class="btn-send btn btn-primary">Send</button>
+                </span> 
+              </div>
+          </div>
+        </form>
       </div>
-    </div>
     <router-link class="btn btn-default" to="/register">Create a new account</router-link>
   </div>
 </template>

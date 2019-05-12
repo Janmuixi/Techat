@@ -5,20 +5,20 @@
       <form>
         <h2 class="title text-center">New Chat</h2>       
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Name your chat" required="required">
+            <input v-model="name" type="text" class="form-control" placeholder="Name your chat" required="required">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="#Tag - Exemple: #ANGLR, #PYTHN" required="required">
+            <input v-model="tag" type="text" class="form-control" placeholder="#Tag - Exemple: #ANGLR, #PYTHN" required="required">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Short description" required="required">
+            <input v-model="shortDescription" type="text" class="form-control" placeholder="Short description" required="required">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Long description" required="required">
+            <input v-model="longDescription" type="text" class="form-control" placeholder="Long description" required="required">
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block">Create</button>
-        </div>       
+            <button v-on:click="createNewChat" class="btn btn-primary btn-block">Create</button>
+        </div> 
       </form>
     </div>
   </div>
@@ -41,8 +41,22 @@ export default {
     Navbar
   },
   methods: {
-    createNewChat: function () {
-      this.$router.push('/home')
+    createNewChat: async function () {
+      try {
+        const chats = await firebase.database().ref().child("chats")
+        const newChat = await chats.push()
+        await newChat.child("name").set(this.name)
+        await newChat.child("tag").set(this.tag)
+        await newChat.child("shortDescription").set(this.shortDescription)
+        await newChat.child("longDescription").set(this.longDescription)
+        const members = await newChat.child("members")
+        const member = await members.push()
+        await member.child("email").set(firebase.auth().currentUser.email)
+        await member.child("role").set("Admin")
+        this.$router.push('/home')
+      } catch (err) {
+        alert(err.message)
+      }
     }
   }
 }
