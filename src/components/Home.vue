@@ -4,23 +4,29 @@
     <div id="global" class="container">
         <h1>Techat, let's talk about technologies!</h1>
     </div>
+    <ChatList id="chatList"></ChatList>
   </div>
 </template>
 
 <script>
 import NewChat from './NewChat'
 import Navbar from './Navbar'
+import ChatList from './ChatList'
 import firebase from 'firebase'
 export default {
   name: 'home',
   components: {
     Navbar,
-    NewChat
+    NewChat,
+    ChatList
   }
 }
 </script>
 <style>
   #global {
-     margin-top: 100px; 
-    }
+     margin-top: 50px; 
+  }
+  #chatList {
+    margin-top: 50px;
+  }
 </style>
