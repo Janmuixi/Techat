@@ -1,11 +1,15 @@
 <template>
-  <div id="chat-list">
-    <ul class="list-group" id="chats-list">
-        <li class="list-group-item" v-for="item of chats" v-bind:key="item.message">
+<div id="Chat-List">
+  <div id="list">
+    <ul class="list-group container" >
+        <li class="list-group-item row" v-for="item of chats" v-bind:key="item.message">
             {{item.name}}
+            <button v-on:click="deleteChat(item)" class="btn col-md-auto delete"><i class="fas col-md-auto fa-trash-alt"></i></button>
         </li>
-    </ul>
+        </ul>
   </div>
+</div>
+
 </template>
 
 <script>
@@ -14,7 +18,8 @@ export default {
     name: 'ChatList',
     data: function () {
       return {
-        chats: []
+        chats: [],
+        activeIndex: undefined
       }
     },
     methods: {
@@ -34,8 +39,36 @@ export default {
                     })
                 })
             })
-            this.chats = chatsArray            
+            this.chats = chatsArray
         },
+        deleteChat: async function (item) {
+            var chatsRef = await firebase.database().ref().child("chats")
+            chatsRef.once('value', function (snapshot) {
+                snapshot.forEach(function (childSnapshot) {
+                    var name = childSnapshot.child('name')
+                    if (name.val() === item.name) {
+                        var members = childSnapshot.child('members')
+                        members.forEach(function (member) { 
+                            var user = member.child('email').val()
+                            if (user === firebase.auth().currentUser.email) {
+                                var memberRef = member.ref
+                                memberRef.remove()
+                                alert('Chat deleted')
+                                location.reload()
+                            }
+                        })                       
+                    }
+                    var members = childSnapshot.child('members')
+                    members.forEach(function (member) { 
+                        var user = member.child('email').val()
+                        if (user === firebase.auth().currentUser.email) {
+                            var childData = childSnapshot.val()
+                            return 
+                        }
+                    })
+                })
+            })
+        }
         
     },
     created: async function () {
@@ -45,8 +78,19 @@ export default {
 </script>
 
 <style>
-    #chat-list{
-        align-content: center;
-        width: 30%;
+    #Chat-List{
+        text-align: center;
+    }
+    #list {
+        display: inline-block;
+        width: 40%;
+        text-align: left;
+    }
+    .list-group-item:hover{
+        background: #007bff;
+        color: white;
+    }
+    .delete {
+        float: right;
     }
 </style>

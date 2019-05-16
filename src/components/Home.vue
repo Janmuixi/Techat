@@ -1,8 +1,10 @@
 <template>
   <div id="Home">
     <Navbar></Navbar>
-    <div id="global" class="container">
+    <div id="global">
+      <div id="title" class="container">
         <h1>Techat, let's talk about technologies!</h1>
+      </div>      
     </div>
     <ChatList id="chatList"></ChatList>
   </div>
